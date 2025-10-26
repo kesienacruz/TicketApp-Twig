@@ -1,0 +1,11 @@
+/* status badges for tickets */
+.badge {
+  @apply inline-flex items-center rounded-pill px-2 py-1 text-[12px] leading-[16px] font-medium text-white;
+}
+.badge-open { @apply bg-green-600; }
+.badge-in_progress { @apply bg-amber-500; }
+.badge-closed { @apply bg-gray-400; }
+
+.ticket-card {
+  @apply card p-4 flex flex-col gap-4 outline-none focus-visible:ring-2 focus-visible:ring-brand-500;
+}

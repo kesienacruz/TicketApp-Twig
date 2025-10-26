@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TicketApp Twig</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                500: "#2563eb",
+                600: "#1e4fd1",
+                700: "#193fa8"
+              },
+              surface: {
+                DEFAULT: "#ffffff",
+                subtle: "#f9fafb",
+                border: "#e5e7eb"
+              },
+              text: {
+                DEFAULT: "#111827",
+                dim: "#6b7280",
+                inverse: "#ffffff"
+              },
+              danger: {
+                bg: "#fee2e2",
+                text: "#b91c1c",
+                border: "#fecaca"
+              }
+            },
+            borderRadius: {
+              card: "1rem",
+              pill: "9999px"
+            },
+            boxShadow: {
+              card: "0 10px 24px -4px rgb(0 0 0 / 0.06)"
+            },
+            maxWidth: {
+              screen1440: "1440px"
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="stylesheet" href="./styles.css" />
+    <div id="toast-live-polite" class="sr-only" aria-live="polite" role="status"></div>
+    <div id="toast-live-assertive" class="sr-only" aria-live="assertive" role="alert"></div>
+    <style>
+      .page-shell {
+        max-width: 1440px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      @media(min-width:768px){
+        .page-shell {
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
+      }
+      .card {
+        @apply bg-white rounded-card border border-surface-border shadow-card;
+      }
+      .h-header {
+        height: 3.5rem;
+      }
+      :focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 2px #2563eb, 0 0 0 4px white;
+      }
+    </style>
+  </head>
+  <body class="bg-surface-subtle text-text min-h-screen flex flex-col">
+    <header class="bg-white border-b border-surface-border h-header flex items-center" role="navigation" aria-label="Main navigation">
+      <div class="page-shell flex items-center justify-between w-full">
+        <a href="#/" class="flex items-center gap-2">
+          <div class="h-8 w-8 flex items-center justify-center rounded-card bg-brand-600 text-white text-[14px] font-semibold leading-none shadow-card"
+               aria-hidden="true">T</div>
+          <span class="text-text text-base font-semibold leading-none">TicketApp</span>
+        </a>
+        <div id="nav-auth-state" class="flex items-center gap-4 text-sm"></div>
+      </div>
+    </header>
+
+    <main class="flex-1 flex flex-col text-text">
+      <section id="page-landing" class="hidden min-h-[calc(100vh-3.5rem-4rem)] flex-col bg-white">
+        <section class="relative flex flex-col items-center justify-center text-center px-6 py-20 sm:py-28 bg-gradient-to-b from-blue-100 to-white overflow-hidden">
+          <div class="absolute -top-12 -right-12 w-48 h-48 sm:w-64 sm:h-64 bg-blue-300 rounded-full opacity-40 blur-xl mix-blend-multiply" aria-hidden="true"></div>
+          <div class="relative z-10 max-w-2xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-4 text-brand-700">Simplify Your Support Workflow</h1>
+            <p class="text-lg text-gray-700 mb-8">Track, assign, and resolve tickets seamlessly — all in one clean interface.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+              <a href="#/signup" class="bg-brand-600 text-white px-6 py-3 rounded-pill text-sm font-medium hover:bg-brand-700">Get Started</a>
+              <a href="#/login" class="border border-brand-600 text-brand-700 px-6 py-3 rounded-pill text-sm font-medium hover:bg-brand-50">Login</a>
+            </div>
+            <div class="text-[12px] leading-[16px] text-gray-500 mt-4">Test login: test@ticketapp.test / password123</div>
+          </div>
+          <svg class="absolute bottom-0 left-0 w-full h-40 sm:h-56" viewBox="0 0 1440 320" aria-hidden="true">
+            <path fill="#2563eb" d="M0,160L60,149.3C120,139,240,117,360,133.3C480,149,600,203,720,224C840,245,960,235,1080,197.3C1200,160,1320,96,1380,64L1440,32L1440,320L0,320Z"/>
+          </svg>
+        </section>
+        <section class="page-shell py-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="p-6 bg-white shadow-md rounded-card">
+            <h2 class="text-xl font-semibold text-brand-700 mb-2">Manage Tickets</h2>
+            <p class="text-gray-600">Create, edit, and close tickets efficiently with built-in validation.</p>
+          </div>
+          <div class="p-6 bg-white shadow-md rounded-card">
+            <h2 class="text-xl font-semibold text-brand-700 mb-2">Dashboard Overview</h2>
+            <p class="text-gray-600">Visualize open, in-progress, and closed tickets at a glance.</p>
+          </div>
+          <div class="p-6 bg-white shadow-md rounded-card">
+            <h2 class="text-xl font-semibold text-brand-700 mb-2">Secure Access</h2>
+            <p class="text-gray-600">Protected dashboard and tickets page. Session required.</p>
+          </div>
+        </section>
+      </section>
+
+      <section id="page-login" class="hidden flex-1 flex flex-col bg-surface-subtle text-text">
+        <div class="flex flex-1 items-center justify-center page-shell py-16">
+          <div class="card w-full max-w-sm p-6 space-y-6">
+            <div>
+              <h1 class="text-2xl font-semibold">Log in</h1>
+              <p class="text-sm text-text-dim">Use your email and password.</p>
+            </div>
+            <div id="login-top-error" class="hidden rounded-card border border-danger-border bg-danger-bg px-3 py-2 text-danger-text text-sm" role="alert" aria-live="assertive"></div>
+            <form class="space-y-4" id="login-form">
+              <div class="space-y-2">
+                <label for="login-email" class="block text-sm font-medium text-text">Email</label>
+                <input id="login-email" type="email" class="w-full rounded-card border border-surface-border bg-white px-3 py-2 text-sm" placeholder="you@example.com"/>
+                <p id="login-email-error" class="text-sm text-danger-text"></p>
+              </div>
+              <div class="space-y-2">
+                <label for="login-password" class="block text-sm font-medium text-text">Password</label>
+                <input id="login-password" type="password" class="w-full rounded-card border border-surface-border bg-white px-3 py-2 text-sm" placeholder="••••••••"/>
+                <p id="login-password-error" class="text-sm text-danger-text"></p>
+              </div>
+              <button class="w-full rounded-pill bg-brand-600 px-4 py-2 text-white text-sm font-medium hover:bg-brand-700">Sign in</button>
+            </form>
+            <div class="text-center text-sm text-text-dim">
+              No account?
+              <a class="text-brand-600 hover:text-brand-700 font-medium" href="#/signup">Create one</a>
+            </div>
+            <div class="text-center text-[12px] leading-[16px] text-text-dim">Test login: test@ticketapp.test / password123</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-signup" class="hidden flex-1 flex flex-col bg-surface-subtle text-text">
+        <div class="flex flex-1 items-center justify-center page-shell py-16">
+          <div class="card w-full max-w-sm p-6 space-y-6">
+            <div>
+              <h1 class="text-2xl font-semibold">Create account</h1>
+              <p class="text-sm text-text-dim">We'll store your account in localStorage.</p>
+            </div>
+            <div id="signup-top-error" class="hidden rounded-card border border-danger-border bg-danger-bg px-3 py-2 text-danger-text text-sm" role="alert" aria-live="assertive"></div>
+            <form class="space-y-4" id="signup-form">
+              <div class="space-y-2">
+                <label for="signup-email" class="block text-sm font-medium text-text">Email</label>
+                <input id="signup-email" type="email" class="w-full rounded-card border border-surface-border bg-white px-3 py-2 text-sm" placeholder="you@example.com"/>
+                <p id="signup-email-error" class="text-sm text-danger-text"></p>
+              </div>
+              <div class="space-y-2">
+                <label for="signup-password" class="block text-sm font-medium text-text">Password</label>
+                <input id="signup-password" type="password" class="w-full rounded-card border border-surface-border bg-white px-3 py-2 text-sm" placeholder="Create a password"/>
+                <p id="signup-password-error" class="text-sm text-danger-text"></p>
+              </div>
+              <button class="w-full rounded-pill bg-brand-600 px-4 py-2 text-white text-sm font-medium hover:bg-brand-700">Sign up</button>
+            </form>
+            <div class="text-center text-sm text-text-dim">
+              Already have an account?
+              <a class="text-brand-600 hover:text-brand-700 font-medium" href="#/login">Log in</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="page-dashboard" class="hidden flex-1 flex flex-col bg-surface-subtle text-text">
+        <div class="page-shell py-6 space-y-8">
+          <section class="relative overflow-hidden rounded-card border border-surface-border bg-white shadow-card px-6 py-6 md:px-8 md:py-8">
+            <div class="pointer-events-none select-none absolute -top-24 -left-24 w-[220px] blur-2xl opacity-60 md:w-[280px] md:-top-28 md:-left-28 bg-brand-500 rounded-full" aria-hidden="true"></div>
+            <div class="pointer-events-none select-none absolute top-4 right-4 w-20 blur-xl opacity-80 md:w-28 md:top-6 md:right-6 bg-brand-600 rounded-full" aria-hidden="true"></div>
+            <header class="relative space-y-2">
+              <h1 class="text-3xl font-semibold text-text">Welcome back 👋</h1>
+              <p class="text-base text-text-dim">Quick snapshot of your tickets.</p>
+            </header>
+            <p id="dashboard-load-error" class="hidden text-sm text-danger-text mt-4" role="alert" aria-live="assertive"></p>
+          </section>
+          <section class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4" id="dashboard-stats"></section>
+          <section>
+            <a href="#/tickets" class="inline-flex items-center rounded-pill bg-brand-600 px-4 py-2 text-white text-sm font-medium hover:bg-brand-700">View Tickets →</a>
+          </section>
+        </div>
+      </section>
+
+      <section id="page-tickets" class="hidden flex-1 flex flex-col bg-surface-subtle text-text">
+        <div class="page-shell py-6 space-y-6">
+          <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-semibold text-text">Tickets</h1>
+              <p class="text-sm text-text-dim">Manage and track all requests.</p>
+            </div>
+            <button id="btn-new-ticket" class="inline-flex items-center rounded-pill bg-brand-600 px-4 py-2 text-white text-sm font-medium hover:bg-brand-700">+ New Ticket</button>
+          </header>
+
+          <div id="tickets-error" class="hidden">
+            <div class="rounded-card border border-danger-border bg-danger-bg px-3 py-2 text-danger-text text-sm mb-3" role="alert" aria-live="assertive" id="tickets-error-text"></div>
+            <button id="tickets-retry" class="inline-flex items-center rounded-pill bg-brand-600 px-4 py-2 text-white text-sm font-medium hover:bg-brand-700">Retry</button>
+          </div>
+
+          <div id="tickets-empty" class="hidden text-sm text-text-dim">No tickets yet.</div>
+
+          <div id="tickets-list" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"></div>
+
+          <div id="ticket-form-wrapper" class="hidden card p-6 space-y-6">
+            <header>
+              <h2 id="ticket-form-title" class="text-xl font-semibold text-text">New ticket</h2>
+              <p id="ticket-form-desc" class="text-sm text-text-dim">Describe the issue so it can be resolved.</p>
+            </header>
+            <div id="ticket-form-top-error" class="hidden rounded-card border border-danger-border bg-danger-bg px-3 py-2 text-danger-text text-sm" role="alert" aria-live="assertive"></div>
+
+            <form class="space-y-4" id="ticket-form">
+              <input type="hidden" id="ticket-id" />
+              <div class="space-y-2">
+                <label for="ticket-title" class="block text-sm font-medium text-text">Title <span class="text-danger-text">*</span></label>
+                <input id="ticket-title" class="w-full rounded-card border border-surface-border bg-white px-3 py-2 text-sm" placeholder="Printer not working"/>
+                <p id="ticket-title-error" class="text-sm text-danger-text"></p>
+              </div>
+              <div class="space-y-2">
+                <label for="ticket-description" class="block text-sm font-medium text-text">Description <span class="text-text-dim text-[12px]">(optional)</span></label>
+                <textarea id="ticket-description" class="w-full min-h-[80px] rounded-card border border-surface-border bg-white px-3 py-2 text-sm" placeholder="It keeps jamming when we try to print labels."></textarea>
+                <p id="ticket-desc-error" class="text-sm text-danger-text"></p>
+              </div>
+              <div class="space-y-2">
+                <label for="ticket-status" class="block text-sm font-medium text-text">Status <span class="text-danger-text">*</span></label>
+                <select id="ticket-status" class="w-full rounded-card border border-surface-border bg-white px-3 py-2 text-sm">
+                  <option value="open">open</option>
+                  <option value="in_progress">in_progress</option>
+                  <option value="closed">closed</option>
+                </select>
+                <p id="ticket-status-error" class="text-sm text-danger-text"></p>
+              </div>
+              <div class="flex flex-wrap gap-3">
+                <button id="ticket-submit" type="submit" class="rounded-pill bg-brand-600 px-4 py-2 text-white text-sm font-medium hover:bg-brand-700 disabled:opacity-50">Create ticket</button>
+                <button id="ticket-cancel" type="button" class="rounded-pill border border-surface-border bg-white px-4 py-2 text-sm font-medium text-text hover:bg-surface-subtle">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div id="delete-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4 py-8 bg-black/40" role="dialog" aria-modal="true" aria-labelledby="confirm-delete-title">
+          <div id="delete-modal-panel" class="card w-full max-w-sm p-6 space-y-6 bg-white">
+            <div class="space-y-2">
+              <h2 id="confirm-delete-title" class="text-xl font-semibold text-text">Delete ticket?</h2>
+              <p id="delete-ticket-name" class="text-sm text-text-dim"></p>
+              <p class="text-[12px] leading-[16px] text-text-dim" aria-live="assertive" role="alert">This action cannot be undone.</p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <button id="delete-confirm-btn" class="rounded-pill bg-red-700 px-4 py-2 text-white text-sm font-medium hover:bg-red-800 focus-visible:ring-2 focus-visible:ring-brand-500">Confirm delete</button>
+              <button id="delete-cancel-btn" class="rounded-pill border border-surface-border bg-white px-4 py-2 text-sm font-medium text-text hover:bg-surface-subtle focus-visible:ring-2 focus-visible:ring-brand-500">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-surface-border bg-white py-6 text-center text-sm text-text-dim">
+      © <span id="footer-year"></span> TicketApp — All rights reserved.
+    </footer>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
